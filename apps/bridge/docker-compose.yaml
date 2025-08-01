@@ -1,0 +1,6 @@
+services:
+  meshqtt-bridge:
+    build:
+      context: .
+    env_file:
+      - .env
