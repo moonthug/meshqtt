@@ -66,10 +66,12 @@ export class MessageParser {
       throw new Error('Invalid position data');
     }
 
+    debugger;
+
     return {
       type: MessageType.Position,
-      latitude: position.latitudeI / Math.pow(1, position.precisionBits / 4 - 1),
-      longitude: position.longitudeI / Math.pow(1, position.precisionBits / 4 - 1),
+      latitude: position.latitudeI / Math.pow(10, position.precisionBits / 4 - 1),
+      longitude: position.longitudeI / Math.pow(10, position.precisionBits / 4 - 1),
       altitude: position.altitude,
       from: meshPacket.from
     }
@@ -160,8 +162,6 @@ export class MessageParser {
       ? this.decryptMeshPacket(serviceEnvelope.packet)
       : serviceEnvelope.packet.payloadVariant.value;
 
-    console.log('PORTNUM', data.portnum);
-
     if (data.portnum === PortNum.TEXT_MESSAGE_APP) {
       return this.parseTextMessage(serviceEnvelope.packet, data);
     }
@@ -178,6 +178,6 @@ export class MessageParser {
       return this.parseTelemetryMessage(serviceEnvelope.packet, data);
     }
 
-    throw new Error('Invalid message type');
+    throw new Error(`Invalid message type: ${data.portnum}`);
   }
 }
